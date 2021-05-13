@@ -29,13 +29,9 @@ public class Projectile {
     private int y;
     private int xCenter;
     private int yCenter;
-    private int borderWidth;
-    private int borderHeight;
     private final int circleRadius;
     private final int width;
     private final int height;
-    private final int hitboxWidth;
-    private final int hitboxHeight;
 
     protected boolean isABullet;
 
@@ -92,8 +88,8 @@ public class Projectile {
 
         hitbox = new TextureRegion(rHitbox);
 
-        hitboxWidth = hitbox.getRegionWidth();
-        hitboxHeight = hitbox.getRegionHeight();
+        int hitboxWidth = hitbox.getRegionWidth();
+        int hitboxHeight = hitbox.getRegionHeight();
 
         xCenter = x + width / 2;
         yCenter = y + height / 2;
@@ -114,7 +110,7 @@ public class Projectile {
     }
 
     public void renderHitbox(SpriteBatch g) {
-        g.draw(hitbox, xCenter - hitboxWidth / 2.f, yCenter - hitboxHeight / 2.f, circleRadius, circleRadius);
+        g.draw(hitbox, xCenter, yCenter, circleRadius, circleRadius);
     }
 
     public void dispose() {
@@ -127,11 +123,9 @@ public class Projectile {
     }
 
     public void setBorderWidth(int border) {
-        borderWidth = border;
     }
 
     public void setBorderHeight(int border) {
-        borderHeight = border;
     }
 
     public int getX() {
@@ -159,7 +153,7 @@ public class Projectile {
     }
 
     public int getcircleRadius() {
-        return hitboxWidth / 2;
+        return circleRadius;
     }
 
     public boolean isBullet() {

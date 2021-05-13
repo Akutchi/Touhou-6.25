@@ -57,8 +57,8 @@ public class Figure {
 
         x = 230;
         y = 180;
-        xCenter = x + WIDTH / 2;
-        yCenter = y + HEIGHT / 2;
+        xCenter = x + (WIDTH + SCALEUP) / 2;
+        yCenter = y + (HEIGHT + SCALEUP) / 2;
         circleRadius = cRadius;
         indexSprite = 0;
 
@@ -98,7 +98,7 @@ public class Figure {
 
     public void move(int dx, int dy) {
 
-        if (0 < x + dx && x + dx + WIDTH < borderWidth) {
+        if (-5 < x + dx && x + dx + WIDTH < borderWidth) {
             x += dx;
         }
 
@@ -106,16 +106,16 @@ public class Figure {
             y += dy;
         }
 
-        xCenter = x + WIDTH / 2;
-        yCenter = y + HEIGHT / 2;
+        xCenter = x + (WIDTH + SCALEUP) / 2;
+        yCenter = y + (HEIGHT + SCALEUP) / 2;
     }
 
-    public boolean collision(Projectile p) {
+    public boolean isNotTooClose(Projectile p) {
 
         double dx = pow(p.getxCenter() - xCenter * 1.f, 2);
         double dy = pow(p.getyCenter() - yCenter * 1.f, 2);
 
-        return sqrt(dx + dy) < circleRadius + p.getcircleRadius();
+        return sqrt(dx + dy) > circleRadius + p.getcircleRadius();
     }
 
     public void draw(SpriteBatch g) {
@@ -133,7 +133,7 @@ public class Figure {
     }
 
     public void renderHitbox(SpriteBatch g) {
-        g.draw(hitbox, xCenter - hitboxWidth / 2f, yCenter - hitboxHeight / 2f, circleRadius, circleRadius);
+        g.draw(hitbox, xCenter, yCenter, circleRadius, circleRadius);
     }
 
     public void dispose() {

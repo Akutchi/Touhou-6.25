@@ -32,6 +32,7 @@ public class Game extends ApplicationAdapter {
 
     private SpriteBatch graphics;
     private SpriteBatch graphicsFigure;
+    private SpriteBatch graphicsProjectile;
 
     private Figure marisa;
     private HorizontalKeyboard horizontalKeyboard;
@@ -54,13 +55,14 @@ public class Game extends ApplicationAdapter {
         sideBar = new TextureRegion(rSideBar, 542, 4, 255, 255);
         graphics = new SpriteBatch();
         graphicsFigure = new SpriteBatch();
+        graphicsProjectile = new SpriteBatch();
 
         marisa = new Figure("Marisa.png", 5);
-        marisa.setBorderWidth(BACKGROUNDWIDTH - 10);
-        marisa.setBorderHeight(BACKGROUNDHEIGHT - 15);
+        marisa.setBorderWidth(BACKGROUNDWIDTH - 15);
+        marisa.setBorderHeight(BACKGROUNDHEIGHT - 20);
 
         Bullet b2 = new Bullet(250, 460, 65);
-        Bullet b3 = new Bullet(230, 460, 65);
+        Bullet b3 = new Bullet(220, 460, 65);
 
         figureList.add(marisa);
         projectileList.add(b2);
@@ -80,21 +82,11 @@ public class Game extends ApplicationAdapter {
         graphics.draw(sideBar, 0, 0, SIDEBARWIDTH, SIDEBARHEIGHT);
         graphics.draw(rBackgroundStage1, 0, 0, BACKGROUNDWIDTH, BACKGROUNDHEIGHT);
 
-        drawProjectiles(graphics);
-
-        // TODO a opti d'urgence
-        for (Figure f : figureList) {
-            for (Projectile p : projectileList) {
-                if (p.isBullet() && f.collision(p) && !f.getInvinsible()) {
-                    f.blink();
-                }
-            }
-        }
-
         graphics.end();
 
         horizontalKeyboard.horizontalKeyboardHandling();
         verticalKeyboard.verticalKeyboardHandling();
+
 
         graphicsFigure.begin();
 
@@ -102,6 +94,22 @@ public class Game extends ApplicationAdapter {
         marisa.renderHitbox(graphicsFigure);
 
         graphicsFigure.end();
+
+
+        graphicsProjectile.begin();
+
+        drawProjectiles(graphicsProjectile);
+
+        // TODO a opti d'urgence
+        for (Figure f : figureList) {
+            for (Projectile p : projectileList) {
+                if (p.isBullet() && !f.isNotTooClose(p) && !f.getInvinsible()) {
+                    f.blink();
+                }
+            }
+        }
+
+        graphicsProjectile.end();
     }
 
     @Override
