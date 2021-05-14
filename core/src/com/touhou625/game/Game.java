@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.touhou625.keyboard.HorizontalKeyboard;
 import com.touhou625.keyboard.VerticalKeyboard;
-import com.touhou625.projectile.Bullet;
+import com.touhou625.patternhandler.PatternHandler;
 import com.touhou625.projectile.Projectile;
 
 import java.util.ArrayList;
@@ -23,7 +23,6 @@ public class Game extends ApplicationAdapter {
     private static final int BACKGROUNDHEIGHT = 765;
 
     private ArrayList<Figure> figureList = new ArrayList<>();
-    private ArrayList<Projectile> projectileList = new ArrayList<>();
 
     private Texture rSideBar;
     private Texture rBackgroundStage1;
@@ -35,18 +34,10 @@ public class Game extends ApplicationAdapter {
     private SpriteBatch graphicsProjectile;
 
     private Figure marisa;
+    private PatternHandler handler;
     private HorizontalKeyboard horizontalKeyboard;
     private VerticalKeyboard verticalKeyboard;
 
-
-    public void drawProjectiles(SpriteBatch g) {
-
-        for (Projectile p : projectileList) {
-            p.move(0, -1);
-            p.draw(g);
-            p.renderHitbox(g);
-        }
-    }
 
     @Override
     public void create() {
@@ -57,19 +48,17 @@ public class Game extends ApplicationAdapter {
         graphicsFigure = new SpriteBatch();
         graphicsProjectile = new SpriteBatch();
 
-        marisa = new Figure("Marisa.png", 5);
+        marisa = new Figure("Marisa.png", 0);
         marisa.setBorderWidth(BACKGROUNDWIDTH - 15);
         marisa.setBorderHeight(BACKGROUNDHEIGHT - 20);
-
-        Bullet b2 = new Bullet(250, 460, 65);
-        Bullet b3 = new Bullet(220, 460, 65);
-
         figureList.add(marisa);
-        projectileList.add(b2);
-        projectileList.add(b3);
 
         horizontalKeyboard = new HorizontalKeyboard(marisa);
         verticalKeyboard = new VerticalKeyboard(marisa);
+
+        handler = new PatternHandler(230, 500);
+
+        handler.generateFlower();
     }
 
 
@@ -98,16 +87,8 @@ public class Game extends ApplicationAdapter {
 
         graphicsProjectile.begin();
 
-        drawProjectiles(graphicsProjectile);
-
-        // TODO a opti d'urgence
-        for (Figure f : figureList) {
-            for (Projectile p : projectileList) {
-                if (p.isBullet() && !f.isNotTooClose(p) && !f.getInvinsible()) {
-                    f.blink();
-                }
-            }
-        }
+        handler.drawProjectiles(graphicsProjectile);
+        handler.handleCollision(figureList);
 
         graphicsProjectile.end();
     }
@@ -116,10 +97,7 @@ public class Game extends ApplicationAdapter {
     public void dispose() {
         rSideBar.dispose();
         rBackgroundStage1.dispose();
-
-        for (Projectile p : projectileList) {
-            p.dispose();
-        }
+        handler.dispose();
         marisa.dispose();
         graphics.dispose();
         graphicsFigure.dispose();

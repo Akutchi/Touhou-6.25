@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-public class Projectile {
+public abstract class Projectile {
 
     /**
      * Projectile ripped by GabrielWoj :
@@ -32,18 +32,22 @@ public class Projectile {
     private final int circleRadius;
     private final int width;
     private final int height;
+    private final double[] direction;
 
-    protected boolean isABullet;
+    private final double angle;
 
     private final Texture rSprite;
     private final Texture rHitbox;
     private final TextureRegion sprite;
     private final TextureRegion hitbox;
 
-    public Projectile(int xStart, int yStart, int id) {
+    public Projectile(int xStart, int yStart, int id, double angleOfRotation, double[] directionProjectile) {
 
         x = xStart;
         y = yStart;
+
+        angle = angleOfRotation;
+        direction = directionProjectile;
 
         rHitbox = new Texture("hitbox.png");
         rSprite = new Texture("projectile.png");
@@ -95,18 +99,18 @@ public class Projectile {
         yCenter = y + height / 2;
     }
 
-    public void move(int dx, int dy) {
+    public void move() {
 
         xCenter = x + width / 2;
         yCenter = y + height / 2;
 
-        x += dx;
-        y += dy;
+        x += direction[0];
+        y += direction[1];
 
     }
 
     public void draw(SpriteBatch g) {
-        g.draw(getSprite(), getX(), getY(), getWidth() * FACTOR, getHeight() * FACTOR);
+        g.draw(getSprite(), getX(), getY(), 0, 0, getWidth(), getHeight(), FACTOR, FACTOR, (float) angle);
     }
 
     public void renderHitbox(SpriteBatch g) {
@@ -120,12 +124,6 @@ public class Projectile {
 
     public boolean isBetween(int x, int start, int end) {
         return x >= start && x <= end;
-    }
-
-    public void setBorderWidth(int border) {
-    }
-
-    public void setBorderHeight(int border) {
     }
 
     public int getX() {
@@ -156,11 +154,9 @@ public class Projectile {
         return circleRadius;
     }
 
-    public boolean isBullet() {
-        return isABullet;
-    }
-
     public TextureRegion getSprite() {
         return sprite;
     }
+
+    public abstract boolean isHarmful();
 }
