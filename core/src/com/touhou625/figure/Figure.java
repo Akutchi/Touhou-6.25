@@ -142,6 +142,14 @@ public class Figure {
         rHitbox.dispose();
     }
 
+    public int getX() {
+        return xCenter;
+    }
+
+    public int getY() {
+        return yCenter;
+    }
+
     public void setBorderWidth(int border) {
         borderWidth = border;
     }

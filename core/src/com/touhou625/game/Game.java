@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.touhou625.keyboard.AttackKeyboard;
 import com.touhou625.keyboard.HorizontalKeyboard;
 import com.touhou625.keyboard.VerticalKeyboard;
 import com.touhou625.patternhandler.PatternHandler;
@@ -37,6 +38,7 @@ public class Game extends ApplicationAdapter {
     private PatternHandler handler;
     private HorizontalKeyboard horizontalKeyboard;
     private VerticalKeyboard verticalKeyboard;
+    private AttackKeyboard attackKeyboard;
 
 
     @Override
@@ -55,10 +57,11 @@ public class Game extends ApplicationAdapter {
 
         horizontalKeyboard = new HorizontalKeyboard(marisa);
         verticalKeyboard = new VerticalKeyboard(marisa);
+        attackKeyboard = new AttackKeyboard(marisa);
 
-        handler = new PatternHandler(230, 500);
+        handler = new PatternHandler();
 
-        handler.generateFlower();
+        handler.generateFlower(230, 500);
     }
 
 
@@ -75,6 +78,7 @@ public class Game extends ApplicationAdapter {
 
         horizontalKeyboard.horizontalKeyboardHandling();
         verticalKeyboard.verticalKeyboardHandling();
+        attackKeyboard.attackKeyboardHandling();
 
 
         graphicsFigure.begin();
@@ -89,6 +93,7 @@ public class Game extends ApplicationAdapter {
 
         handler.drawProjectiles(graphicsProjectile);
         handler.handleCollision(figureList);
+        attackKeyboard.drawMissiles(graphicsProjectile);
 
         graphicsProjectile.end();
     }

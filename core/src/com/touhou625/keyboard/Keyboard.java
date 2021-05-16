@@ -4,8 +4,8 @@ import static java.lang.Math.sqrt;
 
 public interface Keyboard {
 
-    double AMOUNT = 3;
-    double DIAGONAL_AMOUNT = 2 * sqrt(AMOUNT);
+    double AMOUNT = 4;
+    double DIAGONAL_AMOUNT = AMOUNT - 0.5;
 
     void horizontalKeyboardHandling();
 

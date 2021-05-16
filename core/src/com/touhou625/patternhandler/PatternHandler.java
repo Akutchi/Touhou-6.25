@@ -10,32 +10,35 @@ import java.util.ArrayList;
 
 public class PatternHandler {
 
-    private int x;
-    private int y;
-
+    private final double[] initialDirection = {0.0, 1.0};
     private final ArrayList<Projectile> projectileList = new ArrayList<>();
-    private final double[] initialDirection = {0.0, -1.0};
     private final Matrix matrix;
 
-    public PatternHandler(int xOrigin, int yOrigin) {
+    public PatternHandler() {
         matrix = new Matrix();
-        x = xOrigin;
-        y = yOrigin;
-
     }
 
-    public void generateProjectile(int id, double angle) {
+    public void generateProjectile(int xOrigin, int yOrigin, int id, double angle) {
 
         matrix.initalizeMatrix(angle);
         double[] direction = matrix.rotation(initialDirection);
 
-        projectileList.add(new Bullet(x, y, id, angle, direction));
+        Bullet b = new Bullet(xOrigin, yOrigin, id, angle, direction);
+        projectileList.add(b);
     }
 
-    public void generateFlower() {
+    public void generateProjectile(int xOrigin, int yOrigin, int id, double angle, double[] initialDirection) {
+
+        matrix.initalizeMatrix(angle);
+        double[] direction = matrix.rotation(initialDirection);
+        Bullet bullet = new Bullet(xOrigin, yOrigin, id, angle, direction);
+        projectileList.add(bullet);
+    }
+
+    public void generateFlower(int xOrigin, int yOrigin) {
 
         for (int i = 0; i < 10; i++) {
-            generateProjectile(65, -(360 / 10f) * i);
+            generateProjectile(xOrigin, yOrigin, 65, -(360 / 10f) * i);
         }
     }
 
@@ -44,7 +47,6 @@ public class PatternHandler {
         for (Projectile p : projectileList) {
             p.move();
             p.draw(g);
-            p.renderHitbox(g);
         }
     }
 
@@ -63,5 +65,9 @@ public class PatternHandler {
         for (Projectile p : projectileList) {
             p.dispose();
         }
+    }
+
+    public ArrayList<Projectile> getProjectileList() {
+        return projectileList;
     }
 }
