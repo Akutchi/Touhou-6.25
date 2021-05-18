@@ -1,8 +1,11 @@
 package com.touhou625.projectile;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public abstract class Projectile {
 
@@ -41,7 +44,7 @@ public abstract class Projectile {
     private final TextureRegion sprite;
     private final TextureRegion hitbox;
 
-    public Projectile(int xStart, int yStart, int id, double angleOfRotation, double[] directionProjectile) {
+    protected Projectile(int xStart, int yStart, int id, double angleOfRotation, double[] directionProjectile) {
 
         x = xStart;
         y = yStart;
@@ -99,6 +102,32 @@ public abstract class Projectile {
         yCenter = y + height / 2;
     }
 
+    protected Projectile(int xStart, int yStart, TextureRegion spriteProjectile, double angleOfRotation, double[] directionProjectile) {
+
+        x = xStart;
+        y = yStart;
+
+        angle = angleOfRotation;
+        direction = directionProjectile;
+        circleRadius = 20;
+
+        rSprite = null;
+        sprite = spriteProjectile;
+
+        rHitbox = new Texture("hitbox.png");
+
+        width = sprite.getRegionWidth();
+        height = sprite.getRegionHeight();
+
+        hitbox = new TextureRegion(rHitbox);
+
+        int hitboxWidth = hitbox.getRegionWidth();
+        int hitboxHeight = hitbox.getRegionHeight();
+
+        xCenter = x + width / 2;
+        yCenter = y + height / 2;
+    }
+
     public void move() {
 
         xCenter = x + width / 2;
@@ -113,8 +142,14 @@ public abstract class Projectile {
         g.draw(getSprite(), getX(), getY(), 0, 0, getWidth(), getHeight(), FACTOR, FACTOR, (float) angle);
     }
 
-    public void renderHitbox(SpriteBatch g) {
-        g.draw(hitbox, xCenter, yCenter, circleRadius, circleRadius);
+    public void renderHitbox(ShapeRenderer sr) {
+        sr.begin(ShapeRenderer.ShapeType.Line);
+        sr.setColor(Color.GREEN);
+        sr.begin(ShapeRenderer.ShapeType.Line);
+        sr.line(getX() - 5.0f, getY(), getX() + 5.0f, getY());
+        sr.line(getX(), getY() - 5.0f, getX(), getY() + 5.0f);
+        sr.circle(getX(), getY(), circleRadius);
+        sr.end();
     }
 
     public void dispose() {

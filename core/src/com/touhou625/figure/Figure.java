@@ -1,10 +1,12 @@
 package com.touhou625.figure;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.touhou625.projectile.Projectile;
 
 import java.util.ArrayList;
@@ -20,6 +22,7 @@ public class Figure {
     private static final int XOFFSET_MOTION = 171;
     private static final int YOFFSET = 14;
     private static final int SCALEUP = 17;
+    private static final float SCALEUPPROJECTILE = 1.2f;
     private static final int TRANSLATION = 2;
 
     private static final float STEP = 0.2f;
@@ -47,6 +50,11 @@ public class Figure {
     private final Texture rawSpriteReversed;
     private final Texture rHitbox;
     private final TextureRegion hitbox;
+
+    private final Texture rawProjectileSprite = new Texture("PatchouliProjectile.png");
+    private final TextureRegion projectileSprite = new TextureRegion(rawProjectileSprite, rawProjectileSprite.getWidth(),
+            rawProjectileSprite.getHeight(), rawProjectileSprite.getWidth() * SCALEUPPROJECTILE,
+            rawProjectileSprite.getHeight() * SCALEUPPROJECTILE);
 
     private ArrayList<TextureRegion> currentSpriteList;
     private final ArrayList<TextureRegion> spriteMotionlessList = new ArrayList<>();
@@ -132,8 +140,13 @@ public class Figure {
         incrementIndexSprite();
     }
 
-    public void renderHitbox(SpriteBatch g) {
-        g.draw(hitbox, xCenter, yCenter, circleRadius, circleRadius);
+    public void renderHitbox(ShapeRenderer sr) {
+        sr.begin(ShapeRenderer.ShapeType.Line);
+        sr.setColor(Color.GREEN);
+        sr.line(getX() - 5.0f, getY(), getX() + 5.0f, getY());
+        sr.line(getX(), getY() - 5.0f, getX(), getY() + 5.0f);
+        sr.circle(getX(), getY(), circleRadius);
+        sr.end();
     }
 
     public void dispose() {

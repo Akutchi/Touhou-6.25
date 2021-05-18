@@ -1,5 +1,8 @@
 package com.touhou625.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.touhou625.figure.Figure;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.graphics.Texture;
@@ -23,7 +26,7 @@ public class Game extends ApplicationAdapter {
     private static final int BACKGROUNDWIDTH = 460;
     private static final int BACKGROUNDHEIGHT = 765;
 
-    private ArrayList<Figure> figureList = new ArrayList<>();
+    private final ArrayList<Figure> figureList = new ArrayList<>();
 
     private Texture rSideBar;
     private Texture rBackgroundStage1;
@@ -33,6 +36,7 @@ public class Game extends ApplicationAdapter {
     private SpriteBatch graphics;
     private SpriteBatch graphicsFigure;
     private SpriteBatch graphicsProjectile;
+    private ShapeRenderer sr;
 
     private Figure marisa;
     private PatternHandler handler;
@@ -49,6 +53,7 @@ public class Game extends ApplicationAdapter {
         graphics = new SpriteBatch();
         graphicsFigure = new SpriteBatch();
         graphicsProjectile = new SpriteBatch();
+        sr = new ShapeRenderer();
 
         marisa = new Figure("Marisa.png", 0);
         marisa.setBorderWidth(BACKGROUNDWIDTH - 15);
@@ -57,17 +62,19 @@ public class Game extends ApplicationAdapter {
 
         horizontalKeyboard = new HorizontalKeyboard(marisa);
         verticalKeyboard = new VerticalKeyboard(marisa);
-        attackKeyboard = new AttackKeyboard(marisa);
+        attackKeyboard = new AttackKeyboard(marisa, BACKGROUNDWIDTH - 15, BACKGROUNDHEIGHT - 20);
 
-        handler = new PatternHandler();
+        handler = new PatternHandler(BACKGROUNDWIDTH - 15, BACKGROUNDHEIGHT - 20);
 
-        handler.generateFlower(230, 500);
+        Gdx.gl.glLineWidth(1);
     }
 
 
     @Override
     public void render() {
         ScreenUtils.clear(0, 0, 0.2f, 1);
+
+        handler.generateFlower(230, 500);
 
         graphics.begin();
 
@@ -84,18 +91,19 @@ public class Game extends ApplicationAdapter {
         graphicsFigure.begin();
 
         marisa.draw(graphicsFigure);
-        marisa.renderHitbox(graphicsFigure);
 
         graphicsFigure.end();
 
 
         graphicsProjectile.begin();
 
-        handler.drawProjectiles(graphicsProjectile);
-        handler.handleCollision(figureList);
+        //handler.drawProjectiles(graphicsProjectile);
+        //handler.handleCollisionFigure(figureList);
         attackKeyboard.drawMissiles(graphicsProjectile);
 
         graphicsProjectile.end();
+
+        marisa.renderHitbox(sr);
     }
 
     @Override
