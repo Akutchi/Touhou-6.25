@@ -18,7 +18,7 @@ public class Figure {
 
     private static final int WIDTH = 30;
     private static final int HEIGHT = 35;
-    private static final int XOFFSET_MOTIONLESS = 5;
+    private static final int XOFFSET_MOTIONLESS = 1;
     private static final int XOFFSET_MOTION = 171;
     private static final int YOFFSET = 14;
     private static final int SCALEUP = 17;

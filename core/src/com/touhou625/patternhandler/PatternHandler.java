@@ -13,12 +13,13 @@ import java.util.Iterator;
 
 public class PatternHandler {
 
-
     private int timing;
     private final int borderWidth;
     private final int borderHeight;
     private final int temporisation = 10;
     private final double angle = 10;
+
+    private boolean flowerHalted;
 
     private final double[] initialDirection = {0.0, -4.0};
 
@@ -29,6 +30,7 @@ public class PatternHandler {
         borderWidth = wallWidth;
         borderHeight = wallHeight;
         timing = 0;
+        flowerHalted = false;
         matrix = new Matrix();
     }
 
@@ -68,8 +70,11 @@ public class PatternHandler {
 
     public void generateFlower(int xOrigin, int yOrigin) {
 
-        for (int i = 0; i < 36; i++) {
-            generateFlowerPart(xOrigin, yOrigin, angle * i);
+        if (!flowerHalted) {
+            for (int i = 0; i < 36; i++) {
+                generateFlowerPart(xOrigin, yOrigin, angle * i);
+            }
+            flowerHalted = true;
         }
     }
 
@@ -84,6 +89,12 @@ public class PatternHandler {
             }
             p.move();
             p.draw(g);
+        }
+    }
+
+    public void renderHitbox(ShapeRenderer sr) {
+        for (Projectile p : projectileList) {
+            p.renderHitbox(sr);
         }
     }
 

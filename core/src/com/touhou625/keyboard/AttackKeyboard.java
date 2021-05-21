@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.touhou625.figure.Figure;
 import com.touhou625.patternhandler.PatternHandler;
+import com.touhou625.projectile.Projectile;
 
 
 public class AttackKeyboard implements Keyboard {
@@ -47,6 +48,12 @@ public class AttackKeyboard implements Keyboard {
 
     public void drawMissiles(SpriteBatch g) {
         handler.drawProjectiles(g);
+    }
+
+    public void renderHitbox(ShapeRenderer sr){
+        for(Projectile p : handler.getProjectileList()){
+            p.renderHitbox(sr);
+        }
     }
 
     @Override

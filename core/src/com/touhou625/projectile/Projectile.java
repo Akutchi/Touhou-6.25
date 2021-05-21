@@ -145,7 +145,6 @@ public abstract class Projectile {
     public void renderHitbox(ShapeRenderer sr) {
         sr.begin(ShapeRenderer.ShapeType.Line);
         sr.setColor(Color.GREEN);
-        sr.begin(ShapeRenderer.ShapeType.Line);
         sr.line(getX() - 5.0f, getY(), getX() + 5.0f, getY());
         sr.line(getX(), getY() - 5.0f, getX(), getY() + 5.0f);
         sr.circle(getX(), getY(), circleRadius);
