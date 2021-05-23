@@ -15,9 +15,7 @@ public class AttackKeyboard implements Keyboard {
 
     private int timing;
 
-    private final int temporisation = 2;
-
-    private final double[] direction = {0.0, -40.0};
+    private final double[] direction = {0.0, -15.0};
 
     private final Texture rawSpriteProjectile = new Texture("PatchouliProjectile.png");
     private final TextureRegion spriteProjectile = new TextureRegion(rawSpriteProjectile, rawSpriteProjectile.getWidth(),
@@ -38,6 +36,7 @@ public class AttackKeyboard implements Keyboard {
         boolean isAttacking = Gdx.input.isKeyPressed(Input.Keys.W);
 
         if (isAttacking) {
+            int temporisation = 5;
             if (timing % temporisation == 0) {
                 handler.generateProjectile(marisa.getX(), marisa.getY(), spriteProjectile, 180, direction);
                 timing = 0;
@@ -50,8 +49,8 @@ public class AttackKeyboard implements Keyboard {
         handler.drawProjectiles(g);
     }
 
-    public void renderHitbox(ShapeRenderer sr){
-        for(Projectile p : handler.getProjectileList()){
+    public void renderHitbox(ShapeRenderer sr) {
+        for (Projectile p : handler.getProjectileList()) {
             p.renderHitbox(sr);
         }
     }

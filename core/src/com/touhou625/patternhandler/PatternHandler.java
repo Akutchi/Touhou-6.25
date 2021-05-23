@@ -13,11 +13,12 @@ import java.util.Iterator;
 
 public class PatternHandler {
 
+    private static final float FACTOR_SHURIKEN = 1.5f;
+    private static final float FACTOR_SELF_BULLET = 2f;
+
     private int timing;
     private final int borderWidth;
     private final int borderHeight;
-    private final int temporisation = 10;
-    private final double angle = 10;
 
     private boolean flowerHalted;
 
@@ -34,44 +35,32 @@ public class PatternHandler {
         matrix = new Matrix();
     }
 
-    public void generateProjectile(int xOrigin, int yOrigin, int id, double angle) {
+    public void generateProjectile(int xOrigin, int yOrigin, int id, float angle) {
 
         matrix.initalizeMatrix(angle);
         double[] direction = matrix.rotation(initialDirection);
 
-        Bullet b = new Bullet(xOrigin, yOrigin, id, angle, direction);
+        Bullet b = new Bullet(xOrigin, yOrigin, id, FACTOR_SHURIKEN, angle, direction);
         projectileList.add(b);
     }
 
-    public void generateProjectile(int xOrigin, int yOrigin, int id, double angle, double[] initialDirection) {
+    public void generateProjectile(int xOrigin, int yOrigin, TextureRegion sprite, float angle, double[] initialDirection) {
 
         matrix.initalizeMatrix(angle);
         double[] direction = matrix.rotation(initialDirection);
-        Bullet bullet = new Bullet(xOrigin, yOrigin, id, angle, direction);
+        Bullet bullet = new Bullet(xOrigin, yOrigin, FACTOR_SELF_BULLET, sprite, angle, direction);
         projectileList.add(bullet);
     }
 
-    public void generateProjectile(int xOrigin, int yOrigin, TextureRegion sprite, double angle, double[] initialDirection) {
-
-        matrix.initalizeMatrix(angle);
-        double[] direction = matrix.rotation(initialDirection);
-        Bullet bullet = new Bullet(xOrigin, yOrigin, sprite, angle, direction);
-        projectileList.add(bullet);
-    }
-
-    public void generateFlowerPart(int xOrigin, int yOrigin, double angleFlower) {
-
-        if (timing % temporisation == 0) {
-            generateProjectile(xOrigin, yOrigin, 65, angleFlower);
-            timing = 0;
-        }
-        timing++;
+    public void generateFlowerPart(int xOrigin, int yOrigin, float angleFlower) {
+        generateProjectile(xOrigin, yOrigin, 65, angleFlower);
     }
 
     public void generateFlower(int xOrigin, int yOrigin) {
-
+        float angle = 10.0f;
+        int number = (int) (360.0f / angle);
         if (!flowerHalted) {
-            for (int i = 0; i < 36; i++) {
+            for (int i = 0; i < number; i++) {
                 generateFlowerPart(xOrigin, yOrigin, angle * i);
             }
             flowerHalted = true;
@@ -114,7 +103,8 @@ public class PatternHandler {
         // TODO a opti d'urgence
         for (Figure f : figureList) {
             for (Projectile p : projectileList) {
-                if (p.isHarmful() && !f.isNotTooClose(p) && !f.getInvinsible()) {
+                if (p.isHarmful() && f.isTooClose(p) && !f.getInvinsible()) {
+                    System.out.println("touched\n");
                     f.blink();
                 }
             }

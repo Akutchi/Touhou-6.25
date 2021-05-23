@@ -16,14 +16,14 @@ import static java.lang.Math.sqrt;
 
 public class Figure {
 
-    private static final int WIDTH = 30;
+    private static final int WIDTH = 24;
     private static final int HEIGHT = 35;
-    private static final int XOFFSET_MOTIONLESS = 1;
+    private static final int XOFFSET_MOTIONLESS = 11;
     private static final int XOFFSET_MOTION = 171;
     private static final int YOFFSET = 14;
     private static final int SCALEUP = 17;
-    private static final float SCALEUPPROJECTILE = 1.2f;
-    private static final int TRANSLATION = 2;
+    private static final float SCALEUPPROJECTILE = 17f;
+    private static final int TRANSLATION = 8;
 
     private static final float STEP = 0.2f;
 
@@ -39,8 +39,6 @@ public class Figure {
     private int signForAlphaChannel;
     private int numberOfBlink;
     private final int circleRadius;
-    private final int hitboxWidth;
-    private final int hitboxHeight;
 
     private float temporisationAlpha;
 
@@ -48,8 +46,6 @@ public class Figure {
 
     private final Texture rawSprite;
     private final Texture rawSpriteReversed;
-    private final Texture rHitbox;
-    private final TextureRegion hitbox;
 
     private final Texture rawProjectileSprite = new Texture("PatchouliProjectile.png");
     private final TextureRegion projectileSprite = new TextureRegion(rawProjectileSprite, rawProjectileSprite.getWidth(),
@@ -96,12 +92,6 @@ public class Figure {
         }
 
         currentSpriteList = spriteMotionlessList;
-
-        rHitbox = new Texture("hitbox.png");
-        hitbox = new TextureRegion(rHitbox);
-
-        hitboxWidth = hitbox.getRegionWidth();
-        hitboxHeight = hitbox.getRegionHeight();
     }
 
     public void move(int dx, int dy) {
@@ -118,12 +108,12 @@ public class Figure {
         yCenter = y + (HEIGHT + SCALEUP) / 2;
     }
 
-    public boolean isNotTooClose(Projectile p) {
+    public boolean isTooClose(Projectile p) {
 
-        double dx = pow(p.getxCenter() - xCenter * 1.f, 2);
-        double dy = pow(p.getyCenter() - yCenter * 1.f, 2);
+        double dx = pow((p.getxCenter() - xCenter) * 1.f, 2);
+        double dy = pow((p.getyCenter() - yCenter) * 1.f, 2);
 
-        return sqrt(dx + dy) > circleRadius + p.getcircleRadius();
+        return sqrt(dx + dy) < (circleRadius + p.getcircleRadius());
     }
 
     public void draw(SpriteBatch g) {
@@ -152,7 +142,6 @@ public class Figure {
     public void dispose() {
         rawSprite.dispose();
         rawSpriteReversed.dispose();
-        rHitbox.dispose();
     }
 
     public int getX() {
@@ -161,6 +150,10 @@ public class Figure {
 
     public int getY() {
         return yCenter;
+    }
+
+    public int getWidth() {
+        return getSprite().getRegionWidth();
     }
 
     public void setBorderWidth(int border) {

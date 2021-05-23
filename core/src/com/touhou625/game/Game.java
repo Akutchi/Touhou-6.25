@@ -55,7 +55,7 @@ public class Game extends ApplicationAdapter {
         graphicsProjectile = new SpriteBatch();
         sr = new ShapeRenderer();
 
-        marisa = new Figure("Marisa.png", 10);
+        marisa = new Figure("Marisa.png", 7);
         marisa.setBorderWidth(BACKGROUNDWIDTH - 15);
         marisa.setBorderHeight(BACKGROUNDHEIGHT - 20);
         figureList.add(marisa);
@@ -106,6 +106,7 @@ public class Game extends ApplicationAdapter {
         marisa.renderHitbox(sr);
         handler.renderHitbox(sr);
         attackKeyboard.renderHitbox(sr);
+
     }
 
     @Override

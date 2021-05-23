@@ -1,6 +1,5 @@
 package com.touhou625.projectile;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -26,7 +25,7 @@ public abstract class Projectile {
     private static final int WIDTH_COLUMN_3 = 32;
     private static final int HEIGHT_COLUMN_3 = 32;
 
-    private static final int FACTOR = 2;
+    private static final int TRANSLATION = 1;
 
     private int x;
     private int y;
@@ -37,22 +36,22 @@ public abstract class Projectile {
     private final int height;
     private final double[] direction;
 
-    private final double angle;
+    private final float factor;
+    private final float angle;
 
     private final Texture rSprite;
-    private final Texture rHitbox;
     private final TextureRegion sprite;
-    private final TextureRegion hitbox;
 
-    protected Projectile(int xStart, int yStart, int id, double angleOfRotation, double[] directionProjectile) {
+
+    protected Projectile(int xStart, int yStart, int id, float zoom, float angleOfRotation, double[] directionProjectile) {
 
         x = xStart;
         y = yStart;
 
         angle = angleOfRotation;
+        factor = zoom;
         direction = directionProjectile;
 
-        rHitbox = new Texture("hitbox.png");
         rSprite = new Texture("projectile.png");
 
         /*
@@ -67,14 +66,13 @@ public abstract class Projectile {
         if (isBetween(id, 16, 96)) {
 
             sprite = new TextureRegion(rSprite, START_BULLET_X + WIDTH_COLUMN_1 * (column - 1),
-                    START_BULLET_Y + HEIGHT_COLUMN_1 * row + row + 1, WIDTH_COLUMN_1, HEIGHT_COLUMN_1);
-            circleRadius = 15;
+                    START_BULLET_Y + HEIGHT_COLUMN_1 * row + row * TRANSLATION, WIDTH_COLUMN_1, HEIGHT_COLUMN_1);
+            circleRadius = 7;
 
         } else if (isBetween(id, 0, 8)) {
 
             sprite = new TextureRegion(rSprite, START_POINT_X + WIDTH_COLUMN_1 * (column - 1),
-                    START_POINT_Y + HEIGHT_COLUMN_1 * row, WIDTH_COLUMN_1, HEIGHT_COLUMN_1);
-
+                    START_POINT_Y + HEIGHT_COLUMN_1 * row + row * TRANSLATION, WIDTH_COLUMN_1, HEIGHT_COLUMN_1);
             circleRadius = 15;
 
         } else {
@@ -93,36 +91,25 @@ public abstract class Projectile {
             height = HEIGHT_COLUMN_1;
         }
 
-        hitbox = new TextureRegion(rHitbox);
-
-        int hitboxWidth = hitbox.getRegionWidth();
-        int hitboxHeight = hitbox.getRegionHeight();
-
         xCenter = x + width / 2;
         yCenter = y + height / 2;
     }
 
-    protected Projectile(int xStart, int yStart, TextureRegion spriteProjectile, double angleOfRotation, double[] directionProjectile) {
+    protected Projectile(int xStart, int yStart, TextureRegion spriteProjectile, float zoom, float angleOfRotation, double[] directionProjectile) {
 
         x = xStart;
         y = yStart;
 
         angle = angleOfRotation;
+        factor = zoom;
         direction = directionProjectile;
-        circleRadius = 20;
+        circleRadius = 10;
 
         rSprite = null;
         sprite = spriteProjectile;
 
-        rHitbox = new Texture("hitbox.png");
-
         width = sprite.getRegionWidth();
         height = sprite.getRegionHeight();
-
-        hitbox = new TextureRegion(rHitbox);
-
-        int hitboxWidth = hitbox.getRegionWidth();
-        int hitboxHeight = hitbox.getRegionHeight();
 
         xCenter = x + width / 2;
         yCenter = y + height / 2;
@@ -130,16 +117,16 @@ public abstract class Projectile {
 
     public void move() {
 
-        xCenter = x + width / 2;
-        yCenter = y + height / 2;
-
         x += direction[0];
         y += direction[1];
+
+        xCenter = x + width / 2;
+        yCenter = y + height / 2;
 
     }
 
     public void draw(SpriteBatch g) {
-        g.draw(getSprite(), getX(), getY(), 0, 0, getWidth(), getHeight(), FACTOR, FACTOR, (float) angle);
+        g.draw(getSprite(), x, y, width / 2.0f, height / 2.0f, getWidth(), getHeight(), factor, factor, angle);
     }
 
     public void renderHitbox(ShapeRenderer sr) {
@@ -153,7 +140,6 @@ public abstract class Projectile {
 
     public void dispose() {
         rSprite.dispose();
-        rHitbox.dispose();
     }
 
     public boolean isBetween(int x, int start, int end) {
@@ -161,11 +147,11 @@ public abstract class Projectile {
     }
 
     public int getX() {
-        return x;
+        return xCenter;
     }
 
     public int getY() {
-        return y;
+        return yCenter;
     }
 
     public int getWidth() {

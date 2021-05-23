@@ -7,7 +7,8 @@ public class Matrix {
     private final double[] values = new double[4];
 
     public void initalizeMatrix(double angle) {
-        double angleInRadian = angle * PI / 180f;
+        double angleInRadian = angle * PI / 180.0f;
+        System.out.println(angle);
         values[0] = cos(angleInRadian);
         values[1] = -sin(angleInRadian);
         values[2] = sin(angleInRadian);
