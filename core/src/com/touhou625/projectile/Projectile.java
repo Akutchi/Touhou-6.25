@@ -27,13 +27,15 @@ public abstract class Projectile {
 
     private static final int TRANSLATION = 1;
 
-    private int x;
-    private int y;
-    private int xCenter;
-    private int yCenter;
     private final int circleRadius;
     private final int width;
     private final int height;
+
+    private double x;
+    private double y;
+    private double xCenter;
+    private double yCenter;
+    
     private final double[] direction;
 
     private final float factor;
@@ -43,7 +45,7 @@ public abstract class Projectile {
     private final TextureRegion sprite;
 
 
-    protected Projectile(int xStart, int yStart, int id, float zoom, float angleOfRotation, double[] directionProjectile) {
+    protected Projectile(double xStart, double yStart, int id, float zoom, float angleOfRotation, double[] directionProjectile) {
 
         x = xStart;
         y = yStart;
@@ -91,11 +93,11 @@ public abstract class Projectile {
             height = HEIGHT_COLUMN_1;
         }
 
-        xCenter = x + width / 2;
-        yCenter = y + height / 2;
+        xCenter = x + width / 2.0;
+        yCenter = y + height / 2.0;
     }
 
-    protected Projectile(int xStart, int yStart, TextureRegion spriteProjectile, float zoom, float angleOfRotation, double[] directionProjectile) {
+    protected Projectile(double xStart, double yStart, TextureRegion spriteProjectile, float zoom, float angleOfRotation, double[] directionProjectile) {
 
         x = xStart;
         y = yStart;
@@ -111,8 +113,8 @@ public abstract class Projectile {
         width = sprite.getRegionWidth();
         height = sprite.getRegionHeight();
 
-        xCenter = x + width / 2;
-        yCenter = y + height / 2;
+        xCenter = x + width / 2.0;
+        yCenter = y + height / 2.0;
     }
 
     public void move() {
@@ -120,21 +122,24 @@ public abstract class Projectile {
         x += direction[0];
         y += direction[1];
 
-        xCenter = x + width / 2;
-        yCenter = y + height / 2;
+        xCenter = x + width / 2.0;
+        yCenter = y + height / 2.0;
 
     }
 
     public void draw(SpriteBatch g) {
-        g.draw(getSprite(), x, y, width / 2.0f, height / 2.0f, getWidth(), getHeight(), factor, factor, angle);
+        g.draw(getSprite(), (float) x, (float) y, width / 2.0f, height / 2.0f, getWidth(), getHeight(),
+                factor, factor, angle);
     }
 
     public void renderHitbox(ShapeRenderer sr) {
         sr.begin(ShapeRenderer.ShapeType.Line);
         sr.setColor(Color.GREEN);
-        sr.line(getX() - 5.0f, getY(), getX() + 5.0f, getY());
-        sr.line(getX(), getY() - 5.0f, getX(), getY() + 5.0f);
-        sr.circle(getX(), getY(), circleRadius);
+        sr.line((float) getxCenter() - circleRadius, (float) getyCenter(), (float) getxCenter() + circleRadius,
+                (float) getyCenter());
+        sr.line((float) getxCenter(), (float) getyCenter() - circleRadius, (float) getxCenter(),
+                (float) getyCenter() + circleRadius);
+        sr.circle((float) getxCenter(), (float) getyCenter(), circleRadius);
         sr.end();
     }
 
@@ -146,12 +151,12 @@ public abstract class Projectile {
         return x >= start && x <= end;
     }
 
-    public int getX() {
-        return xCenter;
+    public double getX() {
+        return x;
     }
 
-    public int getY() {
-        return yCenter;
+    public double getY() {
+        return y;
     }
 
     public int getWidth() {
@@ -162,11 +167,11 @@ public abstract class Projectile {
         return height;
     }
 
-    public int getxCenter() {
+    public double getxCenter() {
         return xCenter;
     }
 
-    public int getyCenter() {
+    public double getyCenter() {
         return yCenter;
     }
 

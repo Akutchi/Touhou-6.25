@@ -8,6 +8,12 @@ import com.touhou625.math.Matrix;
 import com.touhou625.projectile.Bullet;
 import com.touhou625.projectile.Projectile;
 
+import static java.lang.Math.exp;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
+import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -16,11 +22,11 @@ public class PatternHandler {
     private static final float FACTOR_SHURIKEN = 1.5f;
     private static final float FACTOR_SELF_BULLET = 2f;
 
-    private int timing;
     private final int borderWidth;
     private final int borderHeight;
 
     private boolean flowerHalted;
+    private boolean spiralHalted;
 
     private final double[] initialDirection = {0.0, -4.0};
 
@@ -30,12 +36,26 @@ public class PatternHandler {
     public PatternHandler(int wallWidth, int wallHeight) {
         borderWidth = wallWidth;
         borderHeight = wallHeight;
-        timing = 0;
         flowerHalted = false;
+        spiralHalted = false;
         matrix = new Matrix();
     }
 
-    public void generateProjectile(int xOrigin, int yOrigin, int id, float angle) {
+    private double[] spiralCoordinate(int xOrigin, int yOrigin, float angle) {
+        double[] coords = new double[2];
+
+        double k = 3;
+
+        double angleInRadian = angle * Math.PI / 180;
+
+        coords[0] = xOrigin + angle / k * cos(angleInRadian);
+        coords[1] = yOrigin + angle / k * sin(angleInRadian);
+
+        return coords;
+
+    }
+
+    public void generateProjectile(double xOrigin, double yOrigin, int id, float angle) {
 
         matrix.initalizeMatrix(angle);
         double[] direction = matrix.rotation(initialDirection);
@@ -44,26 +64,39 @@ public class PatternHandler {
         projectileList.add(b);
     }
 
-    public void generateProjectile(int xOrigin, int yOrigin, TextureRegion sprite, float angle, double[] initialDirection) {
+    public void generateProjectile(double xOrigin, double yOrigin, TextureRegion sprite, float angle, double[] initialDirection) {
 
         matrix.initalizeMatrix(angle);
         double[] direction = matrix.rotation(initialDirection);
+
         Bullet bullet = new Bullet(xOrigin, yOrigin, FACTOR_SELF_BULLET, sprite, angle, direction);
         projectileList.add(bullet);
     }
 
-    public void generateFlowerPart(int xOrigin, int yOrigin, float angleFlower) {
+    private void generatePatternPart(double xOrigin, double yOrigin, float angleFlower) {
         generateProjectile(xOrigin, yOrigin, 65, angleFlower);
     }
 
-    public void generateFlower(int xOrigin, int yOrigin) {
-        float angle = 10.0f;
-        int number = (int) (360.0f / angle);
+    public void generateCircle(int xOrigin, int yOrigin) {
+        float angle = 5.0f;
+        int number = (int) (360 / angle);
         if (!flowerHalted) {
             for (int i = 0; i < number; i++) {
-                generateFlowerPart(xOrigin, yOrigin, angle * i);
+                generatePatternPart(xOrigin, yOrigin, angle * i);
             }
             flowerHalted = true;
+        }
+    }
+
+    public void generateSpiral(int xOrigin, int yOrigin) {
+        float angle = 10.0f;
+        int number = 100;
+        if (!spiralHalted) {
+            for (int i = 0; i < number; i++) {
+                double[] coords = spiralCoordinate(xOrigin, yOrigin, angle * i);
+                generatePatternPart(coords[0], coords[1], angle * i);
+            }
+            spiralHalted = true;
         }
     }
 

@@ -13,7 +13,6 @@ import com.touhou625.keyboard.AttackKeyboard;
 import com.touhou625.keyboard.HorizontalKeyboard;
 import com.touhou625.keyboard.VerticalKeyboard;
 import com.touhou625.patternhandler.PatternHandler;
-import com.touhou625.projectile.Projectile;
 
 import java.util.ArrayList;
 
@@ -27,6 +26,7 @@ public class Game extends ApplicationAdapter {
     private static final int BACKGROUNDHEIGHT = 765;
 
     private final ArrayList<Figure> figureList = new ArrayList<>();
+    private final ArrayList<PatternHandler> handlerList = new ArrayList<>();
 
     private Texture rSideBar;
     private Texture rBackgroundStage1;
@@ -40,6 +40,8 @@ public class Game extends ApplicationAdapter {
 
     private Figure marisa;
     private PatternHandler handler;
+    private PatternHandler handler2;
+    private PatternHandler handler3;
     private HorizontalKeyboard horizontalKeyboard;
     private VerticalKeyboard verticalKeyboard;
     private AttackKeyboard attackKeyboard;
@@ -55,7 +57,7 @@ public class Game extends ApplicationAdapter {
         graphicsProjectile = new SpriteBatch();
         sr = new ShapeRenderer();
 
-        marisa = new Figure("Marisa.png", 7);
+        marisa = new Figure("Marisa.png", 5);
         marisa.setBorderWidth(BACKGROUNDWIDTH - 15);
         marisa.setBorderHeight(BACKGROUNDHEIGHT - 20);
         figureList.add(marisa);
@@ -65,6 +67,7 @@ public class Game extends ApplicationAdapter {
         attackKeyboard = new AttackKeyboard(marisa, BACKGROUNDWIDTH - 15, BACKGROUNDHEIGHT - 20);
 
         handler = new PatternHandler(BACKGROUNDWIDTH - 15, BACKGROUNDHEIGHT - 20);
+        handlerList.add(handler);
 
         Gdx.gl.glLineWidth(1);
     }
@@ -74,7 +77,7 @@ public class Game extends ApplicationAdapter {
     public void render() {
         ScreenUtils.clear(0, 0, 0.2f, 1);
 
-        handler.generateFlower(230, 500);
+        handler.generateCircle(230, 520);
 
         graphics.begin();
 
@@ -97,16 +100,19 @@ public class Game extends ApplicationAdapter {
 
         graphicsProjectile.begin();
 
-        handler.drawProjectiles(graphicsProjectile);
+        for (PatternHandler h : handlerList) {
+            h.drawProjectiles(graphicsProjectile);
+            h.handleCollisionFigure(figureList);
+        }
         attackKeyboard.drawMissiles(graphicsProjectile);
-        handler.handleCollisionFigure(figureList);
 
         graphicsProjectile.end();
 
         marisa.renderHitbox(sr);
-        handler.renderHitbox(sr);
         attackKeyboard.renderHitbox(sr);
-
+        for (PatternHandler h : handlerList) {
+            h.renderHitbox(sr);
+        }
     }
 
     @Override

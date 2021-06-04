@@ -22,10 +22,10 @@ public class Figure {
     private static final int XOFFSET_MOTION = 171;
     private static final int YOFFSET = 14;
     private static final int SCALEUP = 17;
-    private static final float SCALEUPPROJECTILE = 17f;
     private static final int TRANSLATION = 8;
 
     private static final float STEP = 0.2f;
+    private static final float SCALEUPPROJECTILE = 17f;
 
 
     private int x;
@@ -38,7 +38,7 @@ public class Figure {
     private int temporisationSprite;
     private int signForAlphaChannel;
     private int numberOfBlink;
-    private final int circleRadius;
+    private final float circleRadius;
 
     private float temporisationAlpha;
 
@@ -133,9 +133,9 @@ public class Figure {
     public void renderHitbox(ShapeRenderer sr) {
         sr.begin(ShapeRenderer.ShapeType.Line);
         sr.setColor(Color.GREEN);
-        sr.line(getX() - 5.0f, getY(), getX() + 5.0f, getY());
-        sr.line(getX(), getY() - 5.0f, getX(), getY() + 5.0f);
-        sr.circle(getX(), getY(), circleRadius);
+        sr.line(getxCenter() - circleRadius, getyCenter(), getxCenter() + circleRadius, getyCenter());
+        sr.line(getxCenter(), getyCenter() - circleRadius, getxCenter(), getyCenter() + circleRadius);
+        sr.circle(getxCenter(), getyCenter(), circleRadius);
         sr.end();
     }
 
@@ -144,11 +144,11 @@ public class Figure {
         rawSpriteReversed.dispose();
     }
 
-    public int getX() {
+    public int getxCenter() {
         return xCenter;
     }
 
-    public int getY() {
+    public int getyCenter() {
         return yCenter;
     }
 

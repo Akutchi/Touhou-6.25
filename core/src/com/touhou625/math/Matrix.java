@@ -8,7 +8,6 @@ public class Matrix {
 
     public void initalizeMatrix(double angle) {
         double angleInRadian = angle * PI / 180.0f;
-        System.out.println(angle);
         values[0] = cos(angleInRadian);
         values[1] = -sin(angleInRadian);
         values[2] = sin(angleInRadian);

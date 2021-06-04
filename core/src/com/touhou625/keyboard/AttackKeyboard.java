@@ -38,7 +38,7 @@ public class AttackKeyboard implements Keyboard {
         if (isAttacking) {
             int temporisation = 5;
             if (timing % temporisation == 0) {
-                handler.generateProjectile(marisa.getX(), marisa.getY(), spriteProjectile, 180, direction);
+                handler.generateProjectile(marisa.getxCenter(), marisa.getyCenter(), spriteProjectile, 180, direction);
                 timing = 0;
             }
             timing++;
