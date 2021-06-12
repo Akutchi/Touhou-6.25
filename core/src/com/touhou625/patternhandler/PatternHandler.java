@@ -8,11 +8,8 @@ import com.touhou625.math.Matrix;
 import com.touhou625.projectile.Bullet;
 import com.touhou625.projectile.Projectile;
 
-import static java.lang.Math.exp;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
-import static java.lang.Math.pow;
-import static java.lang.Math.sqrt;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -22,8 +19,10 @@ public class PatternHandler {
     private static final float FACTOR_SHURIKEN = 1.5f;
     private static final float FACTOR_SELF_BULLET = 2f;
 
-    private final int borderWidth;
-    private final int borderHeight;
+    private int borderX;
+    private int borderY;
+    private int borderXEnd;
+    private int borderYEnd;
 
     private boolean flowerHalted;
     private boolean spiralHalted;
@@ -33,9 +32,7 @@ public class PatternHandler {
     private final ArrayList<Projectile> projectileList = new ArrayList<>();
     private final Matrix matrix;
 
-    public PatternHandler(int wallWidth, int wallHeight) {
-        borderWidth = wallWidth;
-        borderHeight = wallHeight;
+    public PatternHandler() {
         flowerHalted = false;
         spiralHalted = false;
         matrix = new Matrix();
@@ -90,7 +87,7 @@ public class PatternHandler {
 
     public void generateSpiral(int xOrigin, int yOrigin) {
         float angle = 10.0f;
-        int number = 100;
+        int number = 300;
         if (!spiralHalted) {
             for (int i = 0; i < number; i++) {
                 double[] coords = spiralCoordinate(xOrigin, yOrigin, angle * i);
@@ -121,11 +118,11 @@ public class PatternHandler {
     }
 
     public boolean collisionWallWidth(Projectile p) {
-        return p.getX() < 0 || p.getX() > borderWidth;
+        return p.getX() < borderX || p.getX() > borderXEnd;
     }
 
     public boolean collisionWallHeight(Projectile p) {
-        return p.getY() < 0 || p.getY() > borderHeight;
+        return p.getY() < borderY || p.getY() > borderYEnd;
     }
 
     public boolean collisionWall(Projectile p) {
@@ -152,5 +149,13 @@ public class PatternHandler {
 
     public ArrayList<Projectile> getProjectileList() {
         return projectileList;
+    }
+
+    public void getBorder(int xoffsetBackground, int yoffsetBackground, int wallWidth, int wallHeight) {
+        borderX = xoffsetBackground;
+        borderY = yoffsetBackground;
+        borderXEnd = xoffsetBackground + wallWidth;
+        borderYEnd = yoffsetBackground + wallHeight;
+
     }
 }

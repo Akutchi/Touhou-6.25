@@ -1,72 +1,64 @@
 package com.touhou625.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.touhou625.figure.Figure;
 import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.touhou625.keyboard.AttackKeyboard;
+import com.touhou625.keyboard.DialogueKeyboard;
 import com.touhou625.keyboard.HorizontalKeyboard;
 import com.touhou625.keyboard.VerticalKeyboard;
 import com.touhou625.patternhandler.PatternHandler;
+import com.touhou625.scene.Stage;
 
 import java.util.ArrayList;
 
 
 public class Game extends ApplicationAdapter {
 
-    private static final int FACTOR = 3;
-    private static final int SIDEBARWIDTH = 255 * FACTOR;
-    private static final int SIDEBARHEIGHT = 255 * FACTOR;
-    private static final int BACKGROUNDWIDTH = 460;
-    private static final int BACKGROUNDHEIGHT = 765;
+    private static final int GAMEWIDTH = 1920;
 
+    private final String[] stage1Lines = {"text", "test", "hey"};
     private final ArrayList<Figure> figureList = new ArrayList<>();
     private final ArrayList<PatternHandler> handlerList = new ArrayList<>();
-
-    private Texture rSideBar;
-    private Texture rBackgroundStage1;
-
-    private TextureRegion sideBar;
 
     private SpriteBatch graphics;
     private SpriteBatch graphicsFigure;
     private SpriteBatch graphicsProjectile;
+    private SpriteBatch graphicsDialogue;
     private ShapeRenderer sr;
 
+    private Stage stage1;
     private Figure marisa;
     private PatternHandler handler;
-    private PatternHandler handler2;
-    private PatternHandler handler3;
     private HorizontalKeyboard horizontalKeyboard;
     private VerticalKeyboard verticalKeyboard;
     private AttackKeyboard attackKeyboard;
-
+    private DialogueKeyboard dialogueKeyboard;
 
     @Override
     public void create() {
-        rSideBar = new Texture("sideBar.png");
-        rBackgroundStage1 = new Texture("Th06MistyLake.jpg");
-        sideBar = new TextureRegion(rSideBar, 542, 4, 255, 255);
         graphics = new SpriteBatch();
         graphicsFigure = new SpriteBatch();
         graphicsProjectile = new SpriteBatch();
+        graphicsDialogue = new SpriteBatch();
         sr = new ShapeRenderer();
 
+        stage1 = new Stage("Th06MistyLake.jpg", stage1Lines, GAMEWIDTH);
+
         marisa = new Figure("Marisa.png", 5);
-        marisa.setBorderWidth(BACKGROUNDWIDTH - 15);
-        marisa.setBorderHeight(BACKGROUNDHEIGHT - 20);
+        marisa.setBorder((GAMEWIDTH - stage1.getWidth()) / 2, stage1.getY(), stage1.getWidth(), stage1.getHeight());
         figureList.add(marisa);
 
         horizontalKeyboard = new HorizontalKeyboard(marisa);
         verticalKeyboard = new VerticalKeyboard(marisa);
-        attackKeyboard = new AttackKeyboard(marisa, BACKGROUNDWIDTH - 15, BACKGROUNDHEIGHT - 20);
+        attackKeyboard = new AttackKeyboard(marisa, stage1.getX(), stage1.getY(), stage1.getWidth(), stage1.getHeight());
+        dialogueKeyboard = new DialogueKeyboard();
 
-        handler = new PatternHandler(BACKGROUNDWIDTH - 15, BACKGROUNDHEIGHT - 20);
+        handler = new PatternHandler();
+        handler.getBorder(stage1.getX(), stage1.getY(), stage1.getWidth(), stage1.getHeight());
         handlerList.add(handler);
 
         Gdx.gl.glLineWidth(1);
@@ -75,50 +67,44 @@ public class Game extends ApplicationAdapter {
 
     @Override
     public void render() {
-        ScreenUtils.clear(0, 0, 0.2f, 1);
+        ScreenUtils.clear(0, 0, 0, 1);
 
-        handler.generateCircle(230, 520);
+        handler.generateSpiral(810, 800);
 
-        graphics.begin();
+        stage1.draw(graphics);
 
-        graphics.draw(sideBar, 0, 0, SIDEBARWIDTH, SIDEBARHEIGHT);
-        graphics.draw(rBackgroundStage1, 0, 0, BACKGROUNDWIDTH, BACKGROUNDHEIGHT);
+        if (stage1.isDialogueOn()) {
+            stage1.setChangeDialogue(dialogueKeyboard.changeDialogue());
+            stage1.drawDialogue(graphicsDialogue, sr);
 
-        graphics.end();
+        } else {
+            horizontalKeyboard.horizontalKeyboardHandling();
+            verticalKeyboard.verticalKeyboardHandling();
+            attackKeyboard.attackKeyboardHandling();
 
-        horizontalKeyboard.horizontalKeyboardHandling();
-        verticalKeyboard.verticalKeyboardHandling();
-        attackKeyboard.attackKeyboardHandling();
+            graphicsFigure.begin();
+            marisa.draw(graphicsFigure);
+            graphicsFigure.end();
 
+            graphicsProjectile.begin();
+            for (PatternHandler h : handlerList) {
+                h.drawProjectiles(graphicsProjectile);
+                h.handleCollisionFigure(figureList);
+            }
+            attackKeyboard.drawMissiles(graphicsProjectile);
+            graphicsProjectile.end();
 
-        graphicsFigure.begin();
-
-        marisa.draw(graphicsFigure);
-
-        graphicsFigure.end();
-
-
-        graphicsProjectile.begin();
-
-        for (PatternHandler h : handlerList) {
-            h.drawProjectiles(graphicsProjectile);
-            h.handleCollisionFigure(figureList);
-        }
-        attackKeyboard.drawMissiles(graphicsProjectile);
-
-        graphicsProjectile.end();
-
-        marisa.renderHitbox(sr);
-        attackKeyboard.renderHitbox(sr);
-        for (PatternHandler h : handlerList) {
-            h.renderHitbox(sr);
+            marisa.renderHitbox(sr);
+            attackKeyboard.renderHitbox(sr);
+            for (PatternHandler h : handlerList) {
+                h.renderHitbox(sr);
+            }
         }
     }
 
     @Override
     public void dispose() {
-        rSideBar.dispose();
-        rBackgroundStage1.dispose();
+        stage1.dispose();
         handler.dispose();
         marisa.dispose();
         graphics.dispose();

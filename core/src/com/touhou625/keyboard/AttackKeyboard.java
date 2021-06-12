@@ -25,10 +25,11 @@ public class AttackKeyboard implements Keyboard {
     private final PatternHandler handler;
 
 
-    public AttackKeyboard(Figure figure, int borderWidth, int borderHeight) {
+    public AttackKeyboard(Figure figure, int xoffset, int yoffset, int borderWidth, int borderHeight) {
         super();
         marisa = figure;
-        handler = new PatternHandler(borderWidth, borderHeight);
+        handler = new PatternHandler();
+        handler.getBorder(xoffset, yoffset, borderWidth, borderHeight);
         timing = 0;
     }
 

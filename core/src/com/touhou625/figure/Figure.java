@@ -1,6 +1,5 @@
 package com.touhou625.figure;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -32,12 +31,15 @@ public class Figure {
     private int y;
     private int xCenter;
     private int yCenter;
-    private int borderWidth;
-    private int borderHeight;
+    private int borderX;
+    private int borderY;
+    private int borderXEnd;
+    private int borderYEnd;
     private int indexSprite;
     private int temporisationSprite;
     private int signForAlphaChannel;
     private int numberOfBlink;
+
     private final float circleRadius;
 
     private float temporisationAlpha;
@@ -59,8 +61,8 @@ public class Figure {
 
     public Figure(String pathToImage, int cRadius) {
 
-        x = 230;
-        y = 180;
+        x = 930;
+        y = 280;
         xCenter = x + (WIDTH + SCALEUP) / 2;
         yCenter = y + (HEIGHT + SCALEUP) / 2;
         circleRadius = cRadius;
@@ -84,10 +86,11 @@ public class Figure {
                     WIDTH, HEIGHT);
             spriteMotionLeft = new TextureRegion(rawSprite, i * (WIDTH + TRANSLATION) + XOFFSET_MOTION, YOFFSET,
                     WIDTH, HEIGHT);
-            spriteMotionRight = new TextureRegion(rawSpriteReversed, i * (WIDTH + TRANSLATION) + XOFFSET_MOTIONLESS,
+            spriteMotionRight = new TextureRegion(rawSprite, i * (WIDTH + TRANSLATION) + XOFFSET_MOTION,
                     YOFFSET, WIDTH, HEIGHT);
             spriteMotionlessList.add(spriteMotionless);
             spriteMotionLeftList.add(spriteMotionLeft);
+            spriteMotionRight.flip(true, false);
             spriteMotionRightList.add(spriteMotionRight);
         }
 
@@ -96,11 +99,11 @@ public class Figure {
 
     public void move(int dx, int dy) {
 
-        if (-5 < x + dx && x + dx + WIDTH < borderWidth) {
+        if (borderX < (x + dx) && (x + dx + WIDTH + SCALEUP) < borderXEnd) {
             x += dx;
         }
 
-        if (0 < y + dy && y + dy + HEIGHT < borderHeight) {
+        if (borderY < (y + dy) && (y + dy + HEIGHT + SCALEUP) < borderYEnd) {
             y += dy;
         }
 
@@ -152,16 +155,11 @@ public class Figure {
         return yCenter;
     }
 
-    public int getWidth() {
-        return getSprite().getRegionWidth();
-    }
-
-    public void setBorderWidth(int border) {
-        borderWidth = border;
-    }
-
-    public void setBorderHeight(int border) {
-        borderHeight = border;
+    public void setBorder(int x, int y, int width, int height) {
+        borderX = x;
+        borderY = y;
+        borderXEnd = x + width;
+        borderYEnd = y + height;
     }
 
     public float modifyAlpha() {
