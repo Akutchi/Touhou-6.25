@@ -15,13 +15,17 @@ public class Stage implements Scene {
     private final int gameWidth;
     private int index;
 
-    private final String[] nextLine;
+    private final String name;
+
+    private final ArrayList<String> nextLine;
 
     private final Texture rBackground;
 
     private final Bubble dialogueBox;
 
-    public Stage(String sceneBackgroundName, String[] lines, int gWidth) {
+    public Stage(String sceneBackgroundName, String stageName, ArrayList<String> lines, int gWidth) {
+
+        name = stageName;
 
         isDialogueOn = true;
         changeDialogue = false;
@@ -34,7 +38,7 @@ public class Stage implements Scene {
 
         dialogueBox = new Bubble();
         dialogueBox.setDimensions(SCENEXOFFSET + 50, 200, SCENEWIDTH - 50, 100);
-        dialogueBox.setLine(nextLine[index]);
+        dialogueBox.setLine(nextLine.get(index));
 
     }
 
@@ -47,14 +51,15 @@ public class Stage implements Scene {
     public void drawDialogue(SpriteBatch g, ShapeRenderer sr) {
 
         if (changeDialogue) {
-            if (index < nextLine.length) {
-                dialogueBox.setLine(nextLine[index]);
+            if (index < nextLine.size()) {
+                dialogueBox.setLine(nextLine.get(index));
                 index++;
+                changeDialogue = false;
+            } else {
+                toogleDialogue();
+                index = 0;
             }
-            toogleDialogue();
-            index = 0;
         }
-
         dialogueBox.draw(g, sr);
     }
 
@@ -84,6 +89,10 @@ public class Stage implements Scene {
 
     public int getHeight() {
         return SCENEHEIGHT;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void dispose() {

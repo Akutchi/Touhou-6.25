@@ -14,8 +14,8 @@ public class Bubble {
     private static final Color COLORFONT = new Color(INTENSITY, INTENSITY, INTENSITY, 1);
     private static final BitmapFont FONT = new BitmapFont();
 
-    private static final int dx = 10;
-    private static final int dy = 10;
+    private static final int DX = 10;
+    private static final int DY = 10;
 
     private int xLine;
     private int yLine;
@@ -24,8 +24,6 @@ public class Bubble {
 
     private String line;
 
-    public Bubble() {
-    }
 
     public void draw(SpriteBatch g, ShapeRenderer sr) {
 
@@ -39,7 +37,7 @@ public class Bubble {
 
         g.begin();
         FONT.setColor(COLORFONT);
-        FONT.draw(g, line, xLine + dx * 1.0f, yLine + height - dy * 1.0f);
+        FONT.draw(g, line, xLine + DX * 1.0f, yLine + height - DY * 1.0f);
         g.end();
     }
 
