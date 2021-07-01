@@ -2,6 +2,7 @@ package com.touhou625.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.touhou625.dialogue.ExpressionParser;
 import com.touhou625.dialogue.TextParser;
 import com.touhou625.figure.Figure;
 import com.badlogic.gdx.ApplicationAdapter;
@@ -14,6 +15,7 @@ import com.touhou625.keyboard.VerticalKeyboard;
 import com.touhou625.patternhandler.PatternHandler;
 import com.touhou625.scene.Stage;
 
+import java.beans.Expression;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
@@ -21,8 +23,8 @@ import java.util.ArrayList;
 public class Game extends ApplicationAdapter {
 
     private static final int GAMEWIDTH = 1920;
+    private static final String PATH = "./core/assets/";
 
-    private ArrayList<String> stage1Lines;
     private final ArrayList<Figure> figureList = new ArrayList<>();
     private final ArrayList<PatternHandler> handlerList = new ArrayList<>();
 
@@ -51,11 +53,11 @@ public class Game extends ApplicationAdapter {
         sr = new ShapeRenderer();
 
         try {
-            textParserStage1 = new TextParser("../../assets/Text_Stage1.txt");
+            textParserStage1 = new TextParser(PATH + "Text_Stage1.txt");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        stage1Lines = textParserStage1.parseText();
+        ArrayList<String> stage1Lines = textParserStage1.parseText();
 
         stage1 = new Stage("Library.jpg", "Introduction", stage1Lines, GAMEWIDTH);
 

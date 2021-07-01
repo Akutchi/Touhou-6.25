@@ -17,21 +17,20 @@ public class TextParser {
 
     public ArrayList<String> parseText() {
 
-        String tmp = "";
+        StringBuilder tmp = new StringBuilder(50);
         String currentBlock;
         ArrayList<String> result = new ArrayList<>();
 
-        while (sc.hasNextLine()) {
+        while (sc.hasNextLine() && !sc.nextLine().contains("#")) {
 
             currentBlock = sc.nextLine();
-
+            
             if (currentBlock.equals("")) {
-                result.add(tmp);
-                tmp = "";
+                result.add(tmp.toString());
+                tmp.delete(0, tmp.capacity());
             }
 
-            tmp = tmp.concat(currentBlock);
-
+            tmp.append(currentBlock.concat("\n"));
         }
 
         return result;

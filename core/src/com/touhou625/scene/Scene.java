@@ -2,9 +2,9 @@ package com.touhou625.scene;
 
 public interface Scene {
 
-    int SCENEWIDTH = 765;
-    int SCENEHEIGHT = 900;
-    int SCENEXOFFSET = 550;
+    int SCENEWIDTH = 850;
+    int SCENEHEIGHT = 920;
+    int SCENEXOFFSET = 560;
     int SCENEYOFFSET = 100;
 
 }

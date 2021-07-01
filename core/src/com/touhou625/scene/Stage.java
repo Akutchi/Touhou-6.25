@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.touhou625.dialogue.Bubble;
+import com.touhou625.dialogue.ExpressionParser;
 
 import java.util.ArrayList;
 
@@ -13,11 +14,8 @@ public class Stage implements Scene {
     private boolean changeDialogue;
 
     private final int gameWidth;
-    private int index;
 
     private final String name;
-
-    private final ArrayList<String> nextLine;
 
     private final Texture rBackground;
 
@@ -30,16 +28,14 @@ public class Stage implements Scene {
         isDialogueOn = true;
         changeDialogue = false;
 
-        index = 0;
-        nextLine = lines;
-
         rBackground = new Texture(sceneBackgroundName);
         gameWidth = gWidth;
 
-        dialogueBox = new Bubble();
-        dialogueBox.setDimensions(SCENEXOFFSET + 50, 200, SCENEWIDTH - 50, 100);
-        dialogueBox.setLine(nextLine.get(index));
+        ExpressionParser expressionParserStage1 = new ExpressionParser();
+        expressionParserStage1.createExpressions(lines);
 
+        dialogueBox = new Bubble(expressionParserStage1.getTextPurged(), expressionParserStage1.getExpressions());
+        dialogueBox.setDimensions(SCENEXOFFSET, 200, SCENEWIDTH - 50, 100);
     }
 
     public void draw(SpriteBatch g) {
@@ -50,21 +46,7 @@ public class Stage implements Scene {
 
     public void drawDialogue(SpriteBatch g, ShapeRenderer sr) {
 
-        if (changeDialogue) {
-            if (index < nextLine.size()) {
-                dialogueBox.setLine(nextLine.get(index));
-                index++;
-                changeDialogue = false;
-            } else {
-                toogleDialogue();
-                index = 0;
-            }
-        }
-        dialogueBox.draw(g, sr);
-    }
-
-    public void toogleDialogue() {
-        isDialogueOn = !isDialogueOn;
+        changeDialogue = dialogueBox.draw(g, sr, changeDialogue);
     }
 
     public void setChangeDialogue(boolean mode) {

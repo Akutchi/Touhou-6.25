@@ -1,37 +1,52 @@
+# information about the expression's sprite
+# P : Patchouli
+# M : Marisa
+
+# P1 : normal expression
+# P2 : blazed
+# P3 : angry / embarassed ?
+# P4 : sad
+
+# M1 : normal expression
+# M2 : confident
+# M3 : prideful
+# M4 : joking happily
+# M5 : angry
+# M6 : taken aback
+
+
 Patchouli was reading book about magic - as always - when suddenly tiredness befell her.
 While her consciousness was slowly fading, she closed her book and placed it at her right, on a large table.
 
-- *yawn* I, I must be really tired, she murmured.
+P3 / - *yawn* I, I must be really tired, she murmured.
 
-Mustering her last bit of remaning strength she unsummoned the spirit of light
-that served as her lamp and fell asleep on the table.
+Mustering her last bit of remaning strength she unsummoned the spirit of light that served as her lamp
+and fell asleep on the table.
 
 First, there was darkness; but then came coldness.
-A tremendous shiver ran down her spine as she opened her eyes again just to see
-that she was falling in the sky.
+A tremendous shiver ran down her spine as she opened her eyes again just to see that
+she was falling in the sky.
 
-- Wha.. !
+M1 / - Wha.. !
 
-Quickly regaining her composure, she casted a levitating spell and,
-just like a star in the night sky, began to float again in the vast landscape
-that was present before her.
+Quickly regaining her composure, she casted a levitating spell and, just like a star in the night sky,
+began to float again in the vast landscape that was present before her.
 The now completely awake Patchouli then looked around her, she was outside the mansion.
 
-- What happened, she wondered, was I not in the library just now ? How strange.
+M5 / - What happened, she wondered, was I not in the library just now ? How strange.
 
 Recalling her past actions however she gasped,
-- This book !? Do not tell me... I see how it is.
-I can't usally cast strong spell because of my health, but being asleep is another story
-altogether.
+M6 / - This book !? Do not tell me... I see how it is.
+I can't usally cast strong spell because of my health, but being asleep is another story altogether.
 
-Indeed, she had just read a book about body swapping that she had received
-recently and happened to have casted the spell unconsciously.
+Indeed, she had just read a book about body swapping that she had received recently
+and happened to have casted the spell unconsciously.
 
-- How amusing. Let's see now, with whom did I swapped body ?
+M4 / - How amusing. Let's see now, with whom did I swapped body ?
 
 She thus gave a good look at the body of the unfortunate person that was the vicitim of her spell.
 Short blonde hair, a broom, and an outfit that made her look more like a maid than anything...
 was it not Marisa ?
 
-- He he, how amusing...
+M4 / - He he, truly amusing...
 Said she before directing herself to the manor.
