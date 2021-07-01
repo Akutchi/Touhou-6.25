@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.touhou625.projectile.Projectile;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
@@ -54,10 +55,10 @@ public class Figure {
             rawProjectileSprite.getHeight(), rawProjectileSprite.getWidth() * SCALEUPPROJECTILE,
             rawProjectileSprite.getHeight() * SCALEUPPROJECTILE);
 
-    private ArrayList<TextureRegion> currentSpriteList;
-    private final ArrayList<TextureRegion> spriteMotionlessList = new ArrayList<>();
-    private final ArrayList<TextureRegion> spriteMotionLeftList = new ArrayList<>();
-    private final ArrayList<TextureRegion> spriteMotionRightList = new ArrayList<>();
+    private List<TextureRegion> currentSpriteList;
+    private final List<TextureRegion> spriteMotionlessList = new ArrayList<>();
+    private final List<TextureRegion> spriteMotionLeftList = new ArrayList<>();
+    private final List<TextureRegion> spriteMotionRightList = new ArrayList<>();
 
     public Figure(String pathToImage, int cRadius) {
 

@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.touhou625.dialogue.Bubble;
 import com.touhou625.dialogue.ExpressionParser;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class Stage implements Scene {
 
@@ -21,7 +21,7 @@ public class Stage implements Scene {
 
     private final Bubble dialogueBox;
 
-    public Stage(String sceneBackgroundName, String stageName, ArrayList<String> lines, int gWidth) {
+    public Stage(String sceneBackgroundName, String stageName, List<String> lines, int gWidth) {
 
         name = stageName;
 
@@ -31,8 +31,8 @@ public class Stage implements Scene {
         rBackground = new Texture(sceneBackgroundName);
         gameWidth = gWidth;
 
-        ExpressionParser expressionParserStage1 = new ExpressionParser();
-        expressionParserStage1.createExpressions(lines);
+        ExpressionParser expressionParserStage1 = new ExpressionParser(lines);
+        expressionParserStage1.createExpressions();
 
         dialogueBox = new Bubble(expressionParserStage1.getTextPurged(), expressionParserStage1.getExpressions());
         dialogueBox.setDimensions(SCENEXOFFSET, 200, SCENEWIDTH - 50, 100);
@@ -45,12 +45,15 @@ public class Stage implements Scene {
     }
 
     public void drawDialogue(SpriteBatch g, ShapeRenderer sr) {
-
         changeDialogue = dialogueBox.draw(g, sr, changeDialogue);
     }
 
     public void setChangeDialogue(boolean mode) {
         changeDialogue = mode;
+    }
+
+    public void toogleDialogue() {
+        isDialogueOn = !isDialogueOn;
     }
 
     public boolean isDialogueOn() {

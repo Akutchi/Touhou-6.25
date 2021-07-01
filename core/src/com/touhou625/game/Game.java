@@ -1,13 +1,12 @@
 package com.touhou625.game;
 
+import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.touhou625.dialogue.ExpressionParser;
+import com.badlogic.gdx.utils.ScreenUtils;
 import com.touhou625.dialogue.TextParser;
 import com.touhou625.figure.Figure;
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.ScreenUtils;
 import com.touhou625.keyboard.AttackKeyboard;
 import com.touhou625.keyboard.DialogueKeyboard;
 import com.touhou625.keyboard.HorizontalKeyboard;
@@ -15,9 +14,9 @@ import com.touhou625.keyboard.VerticalKeyboard;
 import com.touhou625.patternhandler.PatternHandler;
 import com.touhou625.scene.Stage;
 
-import java.beans.Expression;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class Game extends ApplicationAdapter {
@@ -25,8 +24,8 @@ public class Game extends ApplicationAdapter {
     private static final int GAMEWIDTH = 1920;
     private static final String PATH = "./core/assets/";
 
-    private final ArrayList<Figure> figureList = new ArrayList<>();
-    private final ArrayList<PatternHandler> handlerList = new ArrayList<>();
+    private final List<Figure> figureList = new ArrayList<>();
+    private final List<PatternHandler> handlerList = new ArrayList<>();
 
     private SpriteBatch graphics;
     private SpriteBatch graphicsFigure;
@@ -57,7 +56,7 @@ public class Game extends ApplicationAdapter {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        ArrayList<String> stage1Lines = textParserStage1.parseText();
+        List<String> stage1Lines = textParserStage1.parseText();
 
         stage1 = new Stage("Library.jpg", "Introduction", stage1Lines, GAMEWIDTH);
 
@@ -118,6 +117,7 @@ public class Game extends ApplicationAdapter {
         } else {
             if (stage1.isDialogueOn()) {
                 dialogueRendering();
+                stage1.toogleDialogue();
             }
             battleRendering();
         }

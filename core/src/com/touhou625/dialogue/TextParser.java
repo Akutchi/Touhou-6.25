@@ -3,6 +3,7 @@ package com.touhou625.dialogue;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class TextParser {
@@ -15,16 +16,19 @@ public class TextParser {
         sc = new Scanner(file);
     }
 
-    public ArrayList<String> parseText() {
+    public List<String> parseText() {
 
         StringBuilder tmp = new StringBuilder(50);
         String currentBlock;
         ArrayList<String> result = new ArrayList<>();
 
-        while (sc.hasNextLine() && !sc.nextLine().contains("#")) {
-
+        while (sc.hasNextLine()) {
             currentBlock = sc.nextLine();
-            
+
+            if (currentBlock.contains("#")) {
+                continue;
+            }
+
             if (currentBlock.equals("")) {
                 result.add(tmp.toString());
                 tmp.delete(0, tmp.capacity());
@@ -33,6 +37,7 @@ public class TextParser {
             tmp.append(currentBlock.concat("\n"));
         }
 
+        sc.close();
         return result;
     }
 }

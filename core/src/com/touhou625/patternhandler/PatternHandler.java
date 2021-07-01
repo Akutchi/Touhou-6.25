@@ -13,6 +13,7 @@ import static java.lang.Math.sin;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class PatternHandler {
 
@@ -29,7 +30,7 @@ public class PatternHandler {
 
     private final double[] initialDirection = {0.0, -4.0};
 
-    private final ArrayList<Projectile> projectileList = new ArrayList<>();
+    private final List<Projectile> projectileList = new ArrayList<>();
     private final Matrix matrix;
 
     public PatternHandler() {
@@ -129,12 +130,11 @@ public class PatternHandler {
         return collisionWallWidth(p) || collisionWallHeight(p);
     }
 
-    public void handleCollisionFigure(ArrayList<Figure> figureList) {
+    public void handleCollisionFigure(List<Figure> figureList) {
         // TODO a opti d'urgence
         for (Figure f : figureList) {
             for (Projectile p : projectileList) {
                 if (p.isHarmful() && f.isTooClose(p) && !f.getInvinsible()) {
-                    System.out.println("touched\n");
                     f.blink();
                 }
             }
@@ -147,7 +147,7 @@ public class PatternHandler {
         }
     }
 
-    public ArrayList<Projectile> getProjectileList() {
+    public List<Projectile> getProjectileList() {
         return projectileList;
     }
 

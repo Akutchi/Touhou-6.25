@@ -4,27 +4,31 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ExpressionParser {
 
-    private final ArrayList<TextureRegion> patchouliExpressions = new ArrayList<>();
-    private final ArrayList<TextureRegion> marisaExpressions = new ArrayList<>();
-    private ArrayList<String> textPurged = new ArrayList<>();
-    private ArrayList<TextureRegion> expressions = new ArrayList<>();
+    private List<String> rawText;
+    private final List<String> textPurged = new ArrayList<>();
+    private final List<TextureRegion> patchouliExpressions = new ArrayList<>();
+    private final List<TextureRegion> marisaExpressions = new ArrayList<>();
+    private final List<TextureRegion> expressions = new ArrayList<>();
 
-    public ExpressionParser() {
+    public ExpressionParser(List<String> text) {
 
         int x = 0;
         int y = 0;
 
-        Texture rawExpressionPatchouli = new Texture("patchouli_expression.jpg");
+        rawText = text;
+
+        Texture rawExpressionPatchouli = new Texture("patchouli_expression.png");
         Texture rawExpressionMarisa = new Texture("marisa_expression.jpg");
 
+        int height = 233;
+        int width = 128;
         int[] offestPatchouli = {0, 285};
         for (Integer offset : offestPatchouli) {
             for (int i = 0; i < 2; i++) {
-                int height = 270;
-                int width = 174;
                 patchouliExpressions.add(new TextureRegion(rawExpressionPatchouli, x + width, y + height));
                 x += width;
             }
@@ -37,8 +41,6 @@ public class ExpressionParser {
         int[] offestMarisa = {0, 261, 520};
         for (Integer offset : offestMarisa) {
             for (int i = 0; i < 2; i++) {
-                int height = 270;
-                int width = 174;
                 marisaExpressions.add(new TextureRegion(rawExpressionMarisa, x + width, y + height));
                 x += width;
             }
@@ -46,9 +48,9 @@ public class ExpressionParser {
         }
     }
 
-    public void createExpressions(ArrayList<String> text) {
+    public void createExpressions() {
 
-        for (String line : text) {
+        for (String line : rawText) {
             String[] splittedLine = line.split("/");
 
             if (splittedLine.length > 1) {
@@ -57,22 +59,27 @@ public class ExpressionParser {
                 String actualText = splittedLine[1];
                 textPurged.add(actualText);
 
-                if (expressionMacro.contains("M")) {
-                    expressions.add(patchouliExpressions.get(Integer.parseInt(expressionMacro.substring(1, 1))));
+                System.out.println(expressionMacro);
+
+                if (expressionMacro.contains("P")) {
+                    expressions.add(patchouliExpressions.get(Integer.parseInt(expressionMacro.substring(2, 3)) - 1));
+                } else if (expressionMacro.contains("M")) {
+                    expressions.add(marisaExpressions.get(Integer.parseInt(expressionMacro.substring(2, 3)) - 1));
+                } else {
+                    expressions.add(null);
                 }
 
-                expressions.add(marisaExpressions.get(Integer.parseInt(expressionMacro.substring(1, 1))));
+            } else {
+                textPurged.add(line);
             }
-            textPurged.add(line);
-            expressions.add(null);
         }
     }
 
-    public ArrayList<String> getTextPurged() {
+    public List<String> getTextPurged() {
         return textPurged;
     }
 
-    public ArrayList<TextureRegion> getExpressions() {
+    public List<TextureRegion> getExpressions() {
         return expressions;
     }
 }
