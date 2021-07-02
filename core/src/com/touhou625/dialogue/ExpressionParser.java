@@ -8,7 +8,7 @@ import java.util.List;
 
 public class ExpressionParser {
 
-    private List<String> rawText;
+    private final List<String> rawText;
     private final List<String> textPurged = new ArrayList<>();
     private final List<TextureRegion> patchouliExpressions = new ArrayList<>();
     private final List<TextureRegion> marisaExpressions = new ArrayList<>();
@@ -16,35 +16,34 @@ public class ExpressionParser {
 
     public ExpressionParser(List<String> text) {
 
-        int x = 0;
-        int y = 0;
-
         rawText = text;
 
         Texture rawExpressionPatchouli = new Texture("patchouli_expression.png");
         Texture rawExpressionMarisa = new Texture("marisa_expression.jpg");
 
-        int height = 233;
+        int x;
+        int y;
+        int height = 0;
         int width = 128;
-        int[] offestPatchouli = {0, 285};
+        int[] offestPatchouli = {0, 231};
         for (Integer offset : offestPatchouli) {
+            y = offset;
+            x = 0;
             for (int i = 0; i < 2; i++) {
-                patchouliExpressions.add(new TextureRegion(rawExpressionPatchouli, x + width, y + height));
+                patchouliExpressions.add(new TextureRegion(rawExpressionPatchouli, x, y, x + width, y + height));
                 x += width;
             }
-            y = offset;
         }
-
-        x = 0;
-        y = 0;
 
         int[] offestMarisa = {0, 261, 520};
         for (Integer offset : offestMarisa) {
+            y = offset;
+            x = 0;
             for (int i = 0; i < 2; i++) {
-                marisaExpressions.add(new TextureRegion(rawExpressionMarisa, x + width, y + height));
+                marisaExpressions.add(new TextureRegion(rawExpressionMarisa, x, y, x + width, y + height));
                 x += width;
             }
-            y = offset;
+
         }
     }
 
@@ -59,12 +58,10 @@ public class ExpressionParser {
                 String actualText = splittedLine[1];
                 textPurged.add(actualText);
 
-                System.out.println(expressionMacro);
-
                 if (expressionMacro.contains("P")) {
-                    expressions.add(patchouliExpressions.get(Integer.parseInt(expressionMacro.substring(2, 3)) - 1));
+                    expressions.add(patchouliExpressions.get(Integer.parseInt(expressionMacro.substring(1, 2)) - 1));
                 } else if (expressionMacro.contains("M")) {
-                    expressions.add(marisaExpressions.get(Integer.parseInt(expressionMacro.substring(2, 3)) - 1));
+                    expressions.add(marisaExpressions.get(Integer.parseInt(expressionMacro.substring(1, 2)) - 1));
                 } else {
                     expressions.add(null);
                 }

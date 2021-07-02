@@ -20,10 +20,10 @@ public class Bubble {
     private static final BitmapFont FONT = new BitmapFont();
 
     private static final int XMARGIN = 25;
-    private static final int XPADDING = 10;
+    private static final int XPADDING = 35;
     private static final int YPADDING = 10;
-    private static final int XOFFSETIMAGE = 535;
-    private static final int YOFFSETIMAGE = 50;
+    private static final int XOFFSETIMAGE = 534;
+    private static final int YOFFSETIMAGE = 100;
 
     private int xLine;
     private int yLine;
@@ -53,23 +53,14 @@ public class Bubble {
         return getLastExpression(expression, --index);
     }
 
+    public void drawExpression(SpriteBatch g) {
+        g.begin();
+        g.draw(currentExpression, XOFFSETIMAGE * 1.0f, YOFFSETIMAGE, currentExpression.getRegionWidth() * SCALEIMAGE,
+                currentExpression.getRegionHeight() * SCALEIMAGE);
+        g.end();
+    }
 
-    public boolean draw(SpriteBatch g, ShapeRenderer sr, boolean changeDialogue) {
-
-        if (changeDialogue) {
-            if (indexText < nextLine.size()) {
-
-                indexText++;
-                line = nextLine.get(indexText);
-
-                currentExpression = getLastExpression(expression, indexImage);
-                if (expression.get(++indexImage) != null) {
-                    currentExpression = expression.get(indexImage);
-                }
-                indexImage = indexText;
-            }
-        }
-
+    public void drawRectangle(ShapeRenderer sr) {
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         sr.begin(ShapeRenderer.ShapeType.Filled);
@@ -77,14 +68,34 @@ public class Bubble {
         sr.rect(xLine + XMARGIN * 1.0f, yLine, width, height);
         sr.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
+    }
 
+    public void drawText(SpriteBatch g) {
         g.begin();
         FONT.setColor(COLORFONT);
         FONT.getData().setScale(SCALE, SCALE);
         FONT.draw(g, line, xLine + XPADDING * 1.0f, yLine + height - YPADDING * 1.0f);
-        g.draw(currentExpression, XOFFSETIMAGE * 1.0f, YOFFSETIMAGE, currentExpression.getRegionWidth() * SCALEIMAGE,
-                currentExpression.getRegionHeight() * SCALEIMAGE);
         g.end();
+    }
+
+
+    public boolean draw(SpriteBatch g, ShapeRenderer sr, boolean changeDialogue) {
+
+        if (changeDialogue && indexText < nextLine.size()) {
+
+            indexText++;
+            line = nextLine.get(indexText);
+
+            currentExpression = getLastExpression(expression, indexImage);
+            if (expression.get(++indexImage) != null) {
+                currentExpression = expression.get(indexImage);
+            }
+            indexImage = indexText;
+        }
+
+        drawExpression(g);
+        drawRectangle(sr);
+        drawText(g);
 
         return false;
     }

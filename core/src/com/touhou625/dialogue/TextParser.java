@@ -18,6 +18,8 @@ public class TextParser {
 
     public List<String> parseText() {
 
+        boolean startParsing = false;
+
         StringBuilder tmp = new StringBuilder(50);
         String currentBlock;
         ArrayList<String> result = new ArrayList<>();
@@ -25,16 +27,18 @@ public class TextParser {
         while (sc.hasNextLine()) {
             currentBlock = sc.nextLine();
 
-            if (currentBlock.contains("#")) {
-                continue;
+            if (startParsing) {
+                if ("".equals(currentBlock)) {
+                    result.add(tmp.toString());
+                    tmp.delete(0, tmp.capacity());
+                } else {
+                    tmp.append(currentBlock.concat("\n"));
+                }
+            } else {
+                if ("**".equals(currentBlock)) {
+                    startParsing = true;
+                }
             }
-
-            if (currentBlock.equals("")) {
-                result.add(tmp.toString());
-                tmp.delete(0, tmp.capacity());
-            }
-
-            tmp.append(currentBlock.concat("\n"));
         }
 
         sc.close();
